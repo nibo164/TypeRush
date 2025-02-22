@@ -1,0 +1,26 @@
+{
+  "name": "typerush",
+  "version": "1.0.0",
+  "description": "1対1の対戦型タイピングゲーム",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nibo164/TypeRush.git"
+  },
+  "keywords": [
+    "node.js"
+  ],
+  "author": "Nibo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nibo164/TypeRush/issues"
+  },
+  "homepage": "https://github.com/nibo164/TypeRush#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}
