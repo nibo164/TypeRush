@@ -3,11 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css" />
     <script src="/socket.io/socket.io.js"></script>
     <title>TypeRush</title>
   </head>
   <body>
-    <canvas id="game"></canvas>
+    <div id="canvas_wrapper">
+      <canvas id="game_canvas"></canvas>
+    </div>
     <script src="gamelogic.js"></script>
   </body>
 </html>
