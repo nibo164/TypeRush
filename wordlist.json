@@ -1,0 +1,50 @@
+{
+  "words": [
+    { "jp": "こんにちは", "romaji": "konnichiwa" },
+    { "jp": "ありがとう", "romaji": "arigatou" },
+    { "jp": "さようなら", "romaji": "sayounara" },
+    { "jp": "おはよう", "romaji": "ohayou" },
+    { "jp": "こんばんは", "romaji": "konbanwa" },
+    { "jp": "すみません", "romaji": "sumimasen" },
+    { "jp": "お願いします", "romaji": "onegaishimasu" },
+    { "jp": "大丈夫", "romaji": "daijoubu" },
+    { "jp": "楽しい", "romaji": "tanoshii" },
+    { "jp": "美しい", "romaji": "utsukushii" },
+    { "jp": "面白い", "romaji": "omoshiroi" },
+    { "jp": "難しい", "romaji": "muzukashii" },
+    { "jp": "簡単", "romaji": "kantan" },
+    { "jp": "携帯電話", "romaji": "keitaidenwa" },
+    { "jp": "データ構造", "romaji": "de-takouzou" },
+    { "jp": "アルゴリズム", "romaji": "arugorizumu" },
+    { "jp": "コンピュータサイエンス", "romaji": "konpyu-tasaiensu" },
+    { "jp": "オブジェクト指向", "romaji": "obujekutoshikou" },
+    { "jp": "ネットワークセキュリティ", "romaji": "nettowa-kusekyurithi" },
+    { "jp": "分散コンピューティング", "romaji": "bunsankonpyu-thingu" },
+    {
+      "jp": "ソフトウェアエンジニアリング",
+      "romaji": "sofutoweaenjiniaringu"
+    },
+    { "jp": "人工知能", "romaji": "jinkouchinou" },
+    { "jp": "機械学習", "romaji": "kikaigakushuu" },
+    { "jp": "プログラミング言語", "romaji": "puroguramingugengo" },
+    { "jp": "オペレーティングシステム", "romaji": "opere-thingushisutemu" },
+    { "jp": "データベース管理システム", "romaji": "de-tabe-sukanrishisutemu" },
+    { "jp": "分散システム", "romaji": "bunsanshisutemu" },
+    { "jp": "情報セキュリティ", "romaji": "jouhousekyurithi" },
+    { "jp": "暗号化技術", "romaji": "angoukagijutsu" },
+    { "jp": "ユーザーインターフェース", "romaji": "yu-za-inta-fe-su" },
+    { "jp": "バーチャルリアリティ", "romaji": "ba-charuriarithi" },
+    { "jp": "クラウドコンピューティング", "romaji": "kuraudokonpyu-thingu" },
+    { "jp": "ディープラーニング", "romaji": "di-pura-ningu" },
+    { "jp": "コンピュータビジョン", "romaji": "konpyu-tabijonn" },
+    { "jp": "自然言語処理", "romaji": "shizengengoshori" },
+    { "jp": "データマイニング", "romaji": "de-tamainingu" },
+    { "jp": "サイバーセキュリティ", "romaji": "saiba-sekyurithi" },
+    {
+      "jp": "ハードウェアアクセラレーション",
+      "romaji": "ha-doweaakuserare-shonn"
+    },
+    { "jp": "パターン認識", "romaji": "pata-nnninshiki" },
+    { "jp": "仮想現実", "romaji": "kasougenjitsu" }
+  ]
+}
