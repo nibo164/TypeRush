@@ -1,4 +1,5 @@
 let express = require("express");
+let fs = require("fs");
 let app = express();
 let http = require("http").Server(app);
 let io = require("socket.io")(http);
@@ -33,16 +34,19 @@ http.listen(PORT, () => {
 });
 
 //単語リスト
-let wordList = [
-  "session",
-  "player",
-  "server",
-  "apple",
-  "sky",
-  "opened",
-  "error",
-];
+let json = fs.readFileSync("wordList.json", "utf8");
+let wordList = JSON.parse(json);
+// let wordList = [
+//   "session",
+//   "player",
+//   "server",
+//   "apple",
+//   "sky",
+//   "opened",
+//   "error",
+// ];
 
 function chooseWord() {
-  return wordList[parseInt(Math.random() * wordList.length)];
+  // return wordList[parseInt(Math.random() * wordList.length)];
+  return wordList.words[parseInt(Math.random() * wordList.words.length)];
 }
