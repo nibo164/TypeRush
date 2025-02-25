@@ -1,11 +1,11 @@
 let socket = io();
 
 // ゲームの初期設定
-const canvas = document.getElementById("game");
+const canvas = document.getElementById("game_canvas");
 const context = canvas.getContext("2d");
 
-canvas.width = 600;
-canvas.height = 300;
+canvas.width = 800;
+canvas.height = 400;
 
 let isGameRunning = true;
 let targetWord, enteredChar, currentIdx;
@@ -33,12 +33,12 @@ function updateWord(data) {
 
 function handleKeyPress(event) {
   //文字の正誤判定
-  if (event.key == targetWord[currentIdx]) {
-    enteredChar += targetWord[currentIdx];
+  if (event.key == targetWord.romaji[currentIdx]) {
+    enteredChar += targetWord.romaji[currentIdx];
     currentIdx++;
   }
   //1単語打ち切ったとき
-  if (enteredChar.length == targetWord.length) {
+  if (enteredChar.length == targetWord.romaji.length) {
     isWordSet = false;
     socket.emit("nextWord_to_server");
   }
@@ -58,8 +58,9 @@ function draw() {
   if (!isWordSet) {
     context.fillText("問題読込中…", 200, 100);
   } else {
-    context.fillText("お題: " + targetWord, 200, 100);
-    context.fillText(enteredChar + " |", 200, 150);
+    context.fillText(targetWord.jp, 200, 100);
+    context.fillText(targetWord.romaji, 200, 150);
+    context.fillText(enteredChar + " |", 200, 200);
   }
 }
 
