@@ -2,10 +2,11 @@ let socket = io();
 
 let canvas, canvasWrapper, context;
 
+let battleProg, oppBattleProg, wordList;
+
 let isGameRunning = true,
   isWordSet = false,
-  isNextWordSet = false,
-  isPlayerReady = false;
+  isNextWordSet = false;
 let targetWord, nextTargetWord, enteredChar, currentIdx;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -15,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   //ログイン成功時
-  socket.on("loginSuccess_to_client", (data) => {
-    socket.emit("joinLobby_to_server", { userName: data.userName });
+  socket.on("loginSuccess_to_client", () => {
+    socket.emit("joinLobby_to_server");
   });
 
   //ロビー入室時
@@ -39,6 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
       updateLobbyLog(
         data.userName + "と" + data.opponentName + "が対戦を開始しました"
       );
+    } else if (data.state == "battleFinished") {
+      //対戦終了時
+      updateLobbyLog(data.userName + "が" + data.opponentName + "に勝利！");
     }
   });
 
@@ -46,24 +50,41 @@ document.addEventListener("DOMContentLoaded", () => {
   socket.on("startGame_to_client", (data) => {
     document.getElementById("lobby_log").style.display = "none";
     document.getElementsByTagName("h1")[0].innerText = "対戦中";
-    document.getElementById("battle_wait_button").style.display = "none";
+    document.getElementById("battle_wait_button").remove();
     createGameCanvas();
     document.addEventListener("keydown", handleKeyPress);
-    nextTargetWord = data.nextTargetWord;
+    initBattleProg(data);
     updateWord(data);
     gameLoop();
   });
 
-  // 次の単語を受信
-  socket.on("nextWord_to_client", (data) => {
-    updateWord(data);
+  //対戦結果受信
+  socket.on("gameResult_to_client", (data) => {
+    isGameRunning = false;
+    if (data.winnerId == socket.id) {
+      alert("勝ちました！");
+    } else {
+      alert("負けました…");
+    }
+
+    //ゲーム描画領域を非表示
+    document.getElementById("canvas_wrapper").style.display = "none";
+
+    //対戦部屋から退出
+    socket.emit("leaveRoom_to_server");
+
+    //ロビーに戻る
+    socket.emit("joinLobby_to_server");
   });
 });
 
 function updateWord(data) {
-  targetWord = nextTargetWord;
+  targetWord = data.wordList[data.battleProg];
   isWordSet = true;
-  nextTargetWord = data.targetWord;
+  if (battleProg == wordList.length - 1)
+    //最後の単語の場合
+    nextTargetWord = { jp: "------", romaji: "------" };
+  else nextTargetWord = data.wordList[data.battleProg + 1];
   isNextWordSet = true;
   enteredChar = "";
   currentIdx = 0;
@@ -78,7 +99,13 @@ function handleKeyPress(event) {
   //1単語打ち切ったとき
   if (enteredChar.length == targetWord.romaji.length) {
     (isWordSet = false), (isNextWordSet = false);
-    socket.emit("nextWord_to_server");
+    battleProg++;
+    if (battleProg == wordList.length) {
+      //ゲーム終了をサーバーに通知
+      socket.emit(socket.id + "finishGame_to_server");
+    } else {
+      updateWord({ wordList: wordList, battleProg: battleProg });
+    }
   }
 }
 
@@ -119,19 +146,21 @@ function gameLoop() {
 
 // ログインフォームの作成
 function createLoginForm() {
-  let loginForm = document.createElement("form");
-  loginForm.id = "login_form";
-  loginForm.name = "loginForm";
-  let userNameInput = document.createElement("input");
-  userNameInput.type = "text";
-  userNameInput.name = "userName";
-  let loginButton = document.createElement("button");
-  loginButton.type = "button";
-  loginButton.innerText = "ログイン";
-  loginButton.onclick = login;
-  loginForm.appendChild(userNameInput);
-  loginForm.appendChild(loginButton);
-  document.body.appendChild(loginForm);
+  if (document.getElementById("login_form") == null) {
+    let loginForm = document.createElement("form");
+    loginForm.id = "login_form";
+    loginForm.name = "loginForm";
+    let userNameInput = document.createElement("input");
+    userNameInput.type = "text";
+    userNameInput.name = "userName";
+    let loginButton = document.createElement("button");
+    loginButton.type = "button";
+    loginButton.innerText = "ログイン";
+    loginButton.onclick = login;
+    loginForm.appendChild(userNameInput);
+    loginForm.appendChild(loginButton);
+    document.body.appendChild(loginForm);
+  }
 }
 
 // ログイン処理
@@ -148,37 +177,49 @@ function login() {
 
 //ゲーム描画領域の作成
 function createGameCanvas() {
-  (canvas = document.createElement("canvas")), (canvas.id = "game_canvas");
-  (canvasWrapper = document.createElement("div")),
-    (canvasWrapper.id = "canvas_wrapper");
-  context = canvas.getContext("2d");
-  canvasWrapper.appendChild(canvas);
-  document.body.appendChild(canvasWrapper);
-  (canvas.width = 800), (canvas.height = 400);
+  if (document.getElementById("canvas_wrapper") != null) {
+    document.getElementById("canvas_wrapper").style.display = "block";
+  } else {
+    (canvas = document.createElement("canvas")), (canvas.id = "game_canvas");
+    (canvasWrapper = document.createElement("div")),
+      (canvasWrapper.id = "canvas_wrapper");
+    context = canvas.getContext("2d");
+    canvasWrapper.appendChild(canvas);
+    document.body.appendChild(canvasWrapper);
+    (canvas.width = 800), (canvas.height = 400);
+  }
 }
 
 //ロビーのログを作成
 function createLobbyLog() {
-  let log = document.createElement("ul");
-  log.id = "lobby_log";
-  document.body.appendChild(log);
+  if (document.getElementById("lobby_log") != null) {
+    document.getElementById("lobby_log").style.display = "block";
+  } else {
+    let log = document.createElement("ul");
+    log.id = "lobby_log";
+    document.body.appendChild(log);
+  }
 }
 
 //ロビーのログを更新
 function updateLobbyLog(message) {
-  let log = document.getElementById("lobby_log");
-  let li = document.createElement("li");
-  li.innerText = message;
-  log.appendChild(li);
+  if (document.getElementById("lobby_log") != null) {
+    let log = document.getElementById("lobby_log");
+    let li = document.createElement("li");
+    li.innerText = message;
+    log.appendChild(li);
+  }
 }
 
 //対戦待ちボタンの作成
 function createBattleWaitButton() {
-  let button = document.createElement("button");
-  button.id = "battle_wait_button";
-  button.innerText = "対戦相手を待つ";
-  button.onclick = battleWait;
-  document.body.appendChild(button);
+  if (document.getElementById("battle_wait_button") == null) {
+    let button = document.createElement("button");
+    button.id = "battle_wait_button";
+    button.innerText = "対戦相手を待つ";
+    button.onclick = battleWait;
+    document.body.appendChild(button);
+  }
 }
 
 //対戦相手待ち処理
@@ -186,4 +227,12 @@ function battleWait() {
   document.getElementsByTagName("h1")[0].innerText = "対戦相手を待っています…";
   document.getElementById("battle_wait_button").style.display = "none";
   socket.emit("battleWait_to_server");
+}
+
+//対戦情報の初期化
+function initBattleProg(data) {
+  battleProg = data.battleProg;
+  oppBattleProg = data.oppBattleProg;
+  wordList = data.wordList;
+  isGameRunning = true;
 }
