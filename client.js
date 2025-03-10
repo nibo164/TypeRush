@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //ロビー入室時
   socket.on("lobbyJoined_to_client", () => {
-    document.getElementsByTagName("h1")[0].innerText = "ロビー";
+    document.getElementsByTagName("h3")[0].innerText = "ロビー";
     createLobbyLog();
     createBattleWaitButton();
   });
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 対戦開始
   socket.on("startGame_to_client", (data) => {
     document.getElementById("lobby_log").style.display = "none";
-    document.getElementsByTagName("h1")[0].innerText = "対戦中";
+    document.getElementsByTagName("h3")[0].innerText = "対戦中";
     document.getElementById("battle_wait_button").remove();
     createGameCanvas();
     document.addEventListener("keydown", handleKeyPress);
@@ -150,13 +150,19 @@ function createLoginForm() {
     let loginForm = document.createElement("form");
     loginForm.id = "login_form";
     loginForm.name = "loginForm";
+    let userNameLabel = document.createElement("label");
+    userNameLabel.innerText = "user name";
+    userNameLabel.htmlFor = "userName";
     let userNameInput = document.createElement("input");
     userNameInput.type = "text";
     userNameInput.name = "userName";
     let loginButton = document.createElement("button");
     loginButton.type = "button";
+    loginButton.id = "login_button";
+    loginButton.className = "button";
     loginButton.innerText = "ログイン";
     loginButton.onclick = login;
+    loginForm.appendChild(userNameLabel);
     loginForm.appendChild(userNameInput);
     loginForm.appendChild(loginButton);
     document.body.appendChild(loginForm);
@@ -216,6 +222,7 @@ function createBattleWaitButton() {
   if (document.getElementById("battle_wait_button") == null) {
     let button = document.createElement("button");
     button.id = "battle_wait_button";
+    button.className = "button";
     button.innerText = "対戦相手を待つ";
     button.onclick = battleWait;
     document.body.appendChild(button);
@@ -224,7 +231,7 @@ function createBattleWaitButton() {
 
 //対戦相手待ち処理
 function battleWait() {
-  document.getElementsByTagName("h1")[0].innerText = "対戦相手を待っています…";
+  document.getElementsByTagName("h3")[0].innerText = "対戦相手を待っています…";
   document.getElementById("battle_wait_button").style.display = "none";
   socket.emit("battleWait_to_server");
 }
