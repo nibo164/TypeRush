@@ -5,6 +5,17 @@ body {
   padding: 0;
 }
 
+h3 {
+  margin-top: 5%;
+  margin-bottom: 3%;
+  text-align: center;
+}
+
+#login_form {
+  width: 30%;
+  margin: 0 auto;
+}
+
 #canvas_wrapper {
   width: 800px;
   margin: 0 auto;
@@ -14,4 +25,10 @@ body {
   width: 50%;
   height: 50%;
   overflow-y: scroll;
+  margin: 0 auto;
+}
+
+.button {
+  display: block;
+  margin: 5% auto;
 }
