@@ -15,7 +15,7 @@ let waitingUsers_battle = [];
 let json = fs.readFileSync("wordList.json", "utf8");
 let allWordList = JSON.parse(json);
 
-const WORDLISTLENGTH = 5;
+const WORDLISTLENGTH = 10;
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
