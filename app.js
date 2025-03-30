@@ -12,7 +12,7 @@ let waitingUsers_lobby = [];
 let waitingUsers_battle = [];
 
 //単語リスト
-let json = fs.readFileSync("wordList.json", "utf8");
+let json = fs.readFileSync("wordlist.json", "utf8");
 let allWordList = JSON.parse(json);
 
 const WORDLISTLENGTH = 10;
