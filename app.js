@@ -1,8 +1,12 @@
-let express = require("express");
-let fs = require("fs");
-let app = express();
-let http = require("http").Server(app);
-let io = require("socket.io")(http);
+const express = require("express");
+const fs = require("fs");
+const http = require("http");
+const socketIo = require("socket.io");
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+
 const PORT = process.env.PORT || 7000;
 
 //ロビーにいるユーザーリスト
@@ -136,7 +140,7 @@ io.on("connection", (socket) => {
   });
 });
 
-http.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
